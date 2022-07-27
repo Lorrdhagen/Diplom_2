@@ -9,14 +9,17 @@ import static io.restassured.RestAssured.given;
 
 public class UserApi extends BaseApiSpec {
 
+    private final String REGISTER_URL = "/api/auth/register";
+    private final String LOGIN_URL = "/api/auth/login";
+    private final String UPD_DEL_URL = "/api/auth/user";
+
     @Step("Создать пользователя")
     public Response createUser(UserModel userModel) {
         return given()
                 .spec(getInitSpec())
                 .body(userModel)
                 .when()
-                .post("/api/auth/register");
-
+                .post(REGISTER_URL);
     }
 
     @Step("Логин пользователя")
@@ -25,7 +28,7 @@ public class UserApi extends BaseApiSpec {
                 .spec(getInitSpec())
                 .body(userCredentials)
                 .when()
-                .post("/api/auth/login");
+                .post(LOGIN_URL);
     }
 
     @Step("Обновить  данные пользователя с авторизацией")
@@ -35,7 +38,7 @@ public class UserApi extends BaseApiSpec {
                 .header("Authorization", accessToken)
                 .body(userModel)
                 .when()
-                .patch("/api/auth/user");
+                .patch(UPD_DEL_URL);
     }
 
     @Step("Обновить  данные пользователя без авторизации")
@@ -44,7 +47,7 @@ public class UserApi extends BaseApiSpec {
                 .spec(getInitSpec())
                 .body(userModel)
                 .when()
-                .patch("/api/auth/user");
+                .patch(UPD_DEL_URL);
     }
 
     @Step("Удалить пользователя")
@@ -53,7 +56,7 @@ public class UserApi extends BaseApiSpec {
                 .spec(getInitSpecWithoutContentType())
                 .header("Authorization", accessToken)
                 .when()
-                .delete("/api/auth/user")
+                .delete(UPD_DEL_URL)
                 .then()
                 .assertThat().statusCode(202)
                 .extract().path("success");

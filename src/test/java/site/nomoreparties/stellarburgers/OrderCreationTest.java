@@ -25,6 +25,12 @@ import java.util.List;
 
 public class OrderCreationTest {
 
+    private final String VALID_INGREDIENT1 = "61c0c5a71d1f82001bdaaa6d";
+    private final String VALID_INGREDIENT2 = "61c0c5a71d1f82001bdaaa6f";
+    private final String VALID_INGREDIENT3 = "61c0c5a71d1f82001bdaaa77";
+    private final String INVALID_INGREDIENT1 = "61c0c5a71d1f82001bdhhh6c";
+    private final String INVALID_INGREDIENT2 = "61c0c5a71d1f82001bdhhh76";
+
     private String accessToken;
     private static UserModel userModel;
     private static UserApi userApi;
@@ -49,8 +55,8 @@ public class OrderCreationTest {
     @Description("Создание заказа с авторизацией и валидными ингридиентами, проверка статус-кода и поля success в теле ответа")
     public void orderCteateWithAuthAndValidIngredients() {
         List<String> ingredientsList = new ArrayList<>();
-        ingredientsList.add("61c0c5a71d1f82001bdaaa6d");
-        ingredientsList.add("61c0c5a71d1f82001bdaaa6f");
+        ingredientsList.add(VALID_INGREDIENT1);
+        ingredientsList.add(VALID_INGREDIENT2);
         OrderIngredients orderIngredients = new OrderIngredients(ingredientsList);
         Response respCreate = userApi.createUser(userModel);
         accessToken = respCreate.body().jsonPath().getString("accessToken");
@@ -64,8 +70,8 @@ public class OrderCreationTest {
     @Description("Создание заказа с авторизацией и невалидными ингридиентами, проверка статус-кода")
     public void orderCreateWithAuthAndInvalidIngrients() {
         List<String> ingredientList = new ArrayList<>();
-        ingredientList.add("61c0c5a71d1f82001bdhhh6c");
-        ingredientList.add("61c0c5a71d1f82001bdhhh76");
+        ingredientList.add(INVALID_INGREDIENT1);
+        ingredientList.add(INVALID_INGREDIENT2);
         OrderIngredients orderIngredients = new OrderIngredients(ingredientList);
         Response respCreate = userApi.createUser(userModel);
         accessToken = respCreate.body().jsonPath().getString("accessToken");
@@ -92,8 +98,8 @@ public class OrderCreationTest {
     @Description("Создание заказа без авторизации и с валидными ингридиентами, проверка статус-кода и поля success в теле ответа")
     public void orderCreateNotAuthWithValidIngredients() {
         List<String> ingredientList = new ArrayList<>();
-        ingredientList.add("61c0c5a71d1f82001bdaaa6d");
-        ingredientList.add("61c0c5a71d1f82001bdaaa77");
+        ingredientList.add(VALID_INGREDIENT1);
+        ingredientList.add(VALID_INGREDIENT3);
         OrderIngredients orderIngredients = new OrderIngredients(ingredientList);
         Response respOrder = orderApi.createOrderNotAuth(orderIngredients);
         assertEquals(SC_UNAUTHORIZED, respOrder.statusCode());

@@ -8,10 +8,13 @@ import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 
 public class BaseApiSpec {
+
+    private final String BASE_URL = "https://stellarburgers.nomoreparties.site";
+
     public RequestSpecification getInitSpec() {
         return new RequestSpecBuilder()
                 .setContentType(ContentType.JSON)
-                .setBaseUri("https://stellarburgers.nomoreparties.site")
+                .setBaseUri(BASE_URL)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(new ResponseLoggingFilter(LogDetail.STATUS))
                 .addFilter(new ResponseLoggingFilter(LogDetail.BODY))
@@ -20,7 +23,7 @@ public class BaseApiSpec {
 
     public RequestSpecification getInitSpecWithoutContentType() {
         return new RequestSpecBuilder()
-                .setBaseUri("https://stellarburgers.nomoreparties.site")
+                .setBaseUri(BASE_URL)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(new ResponseLoggingFilter(LogDetail.STATUS))
                 .addFilter(new ResponseLoggingFilter(LogDetail.BODY))

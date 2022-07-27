@@ -19,6 +19,10 @@ import static org.junit.Assert.assertEquals;
 
 public class UserUpdateTest {
 
+    private final String NEW_EMAIL = "newmail@test.ru";
+    private final String NEW_PASSWORD = "newpass12345";
+    private final String NEW_NAME = "Newname";
+
     private String accessToken;
     private String getAccessToken2;
     private static UserModel userModel;
@@ -46,9 +50,9 @@ public class UserUpdateTest {
     public void userUpdateWithAuthAndCorrectData() {
         Response respCreate = userApi.createUser(userModel);
         accessToken = respCreate.body().jsonPath().getString("accessToken");
-        userModel.setEmail("mail777@test.ru");
-        userModel.setPassword("pss12345");
-        userModel.setName("Newname");
+        userModel.setEmail(NEW_EMAIL);
+        userModel.setPassword(NEW_PASSWORD);
+        userModel.setName(NEW_NAME);
         Response respUpdate = userApi.updateUserAuth(userModel, accessToken);
         assertEquals(SC_OK, respUpdate.statusCode());
         UpdateUserRersponseRoot updateUserRersponseRoot = respUpdate.as(UpdateUserRersponseRoot.class);
@@ -61,7 +65,7 @@ public class UserUpdateTest {
     public void userUpdateNotAuth() {
         Response respCreate = userApi.createUser(userModel);
         accessToken = respCreate.body().jsonPath().getString("accessToken");
-        userModel.setName("Newname");
+        userModel.setName(NEW_NAME);
         Response respUpdate = userApi.updateUserNotAuth(userModel);
         assertEquals(SC_UNAUTHORIZED, respUpdate.statusCode());
         UpdateUserUnauthForbidden updateUserUnauthForbidden = respUpdate.as(UpdateUserUnauthForbidden.class);
@@ -72,13 +76,13 @@ public class UserUpdateTest {
     @DisplayName("Обновление почты пользователя на уже используемую")
     @Description("Обновление почты пользователя на уже используемую другим пользователем, проверка статус-кода и поля message в теле ответа")
     public void userUpdateWithMailAlreadyInUse() {
-        userModel.setEmail("newmail@test.ru");
+        userModel.setEmail(NEW_EMAIL);
         Response respCreate = userApi.createUser(userModel);
         accessToken = respCreate.body().jsonPath().getString("accessToken");
         userModel = UserModel.getRandomUser();
         Response respCreate2 = userApi.createUser(userModel);
         getAccessToken2 = respCreate2.body().jsonPath().getString("accessToken");
-        userModel.setEmail("newmail@test.ru");
+        userModel.setEmail(NEW_EMAIL);
         Response respUpdate = userApi.updateUserAuth(userModel, getAccessToken2);
         assertEquals(SC_FORBIDDEN, respUpdate.statusCode());
         UpdateUserUnauthForbidden updateUserUnauthForbidden = respUpdate.as(UpdateUserUnauthForbidden.class);

@@ -8,6 +8,8 @@ import static io.restassured.RestAssured.given;
 
 public class OrderApi extends BaseApiSpec {
 
+    private final String ORDERS_URL = "/api/orders";
+
     @Step("Создать заказ с авторизацией")
     public Response createOrderAuth(OrderIngredients orderIngredients, String accessToken) {
         return given()
@@ -15,7 +17,7 @@ public class OrderApi extends BaseApiSpec {
                 .header("Authorization", accessToken)
                 .body(orderIngredients)
                 .when()
-                .post("/api/orders");
+                .post(ORDERS_URL);
     }
 
     @Step("Создать заказ без авторизации")
@@ -24,23 +26,23 @@ public class OrderApi extends BaseApiSpec {
                 .spec(getInitSpec())
                 .body(orderIngredients)
                 .when()
-                .post("/api/orders");
+                .post(ORDERS_URL);
     }
 
     @Step("Получить список заказов пользователя с авторизацией")
     public Response getUserOrderListAuth(String accessToken) {
         return given()
-                .spec(getInitSpecWithoutContentType())
+                .spec(getInitSpec())
                 .header("Authorization", accessToken)
                 .when()
-                .get("/api/orders");
+                .get(ORDERS_URL);
     }
 
     @Step("Получить список заказов пользователя без авторизации")
     public Response getUserOrdersNotAuth() {
         return given()
-                .spec(getInitSpecWithoutContentType())
+                .spec(getInitSpec())
                 .when()
-                .get("/api/orders");
+                .get(ORDERS_URL);
     }
 }

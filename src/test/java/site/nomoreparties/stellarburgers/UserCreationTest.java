@@ -65,6 +65,7 @@ public class UserCreationTest {
     public void userCreationWithoutEmail() {
         userModel.setEmail("");
         Response respCreate = userApi.createUser(userModel);
+        accessToken = respCreate.body().jsonPath().getString("accessToken");
         assertEquals(SC_FORBIDDEN, respCreate.statusCode());
         CreateUserForbidden createUserForbidden = respCreate.as(CreateUserForbidden.class);
         assertEquals(createUserForbidden.getRequiredFields(), createUserForbidden.getMessage());
@@ -76,6 +77,7 @@ public class UserCreationTest {
     public void userCreationWithoutPassword() {
         userModel.setPassword("");
         Response respCreate = userApi.createUser(userModel);
+        accessToken = respCreate.body().jsonPath().getString("accessToken");
         assertEquals(SC_FORBIDDEN, respCreate.statusCode());
         CreateUserForbidden createUserForbidden = respCreate.as(CreateUserForbidden.class);
         assertEquals(createUserForbidden.getRequiredFields(), createUserForbidden.getMessage());
@@ -87,6 +89,7 @@ public class UserCreationTest {
     public void userCreationWithoutName() {
         userModel.setName("");
         Response respCreate = userApi.createUser(userModel);
+        accessToken = respCreate.body().jsonPath().getString("accessToken");
         assertEquals(SC_FORBIDDEN, respCreate.statusCode());
         CreateUserForbidden createUserForbidden = respCreate.as(CreateUserForbidden.class);
         assertEquals(createUserForbidden.getRequiredFields(), createUserForbidden.getMessage());
